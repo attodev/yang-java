@@ -15,7 +15,7 @@
 
         <dependency>
             <groupId>com.airlenet.yang</groupId>
-            <artifactId>play-jnc</artifactId>
+            <artifactId>yang-jnc</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!--<dependency>-->

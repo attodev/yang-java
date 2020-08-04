@@ -11,7 +11,7 @@
     <description>play yang</description>
     <url>https://github.com/airshiplay/play-yang</url>
     <modules>
-        <module>play-jnc</module>
+        <module>yang-jnc</module>
         <module>yang-codegen</module>
         <module>yang-maven-plugin</module>
         <module>yang-example</module>
