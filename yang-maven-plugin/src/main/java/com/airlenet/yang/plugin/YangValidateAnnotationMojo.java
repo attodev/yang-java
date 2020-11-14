@@ -12,14 +12,7 @@ import java.io.File;
 import java.util.List;
 
 /**
- *
- *
- * Says "Hi" to the user.
- *
- */
-
-/**
- * ProcessorAnnotationMojo calls APT processors for code generation
+ * YangValidateAnnotationMojo calls APT processors for code generation
  *
  * @goal validate
  * @threadSafe true
