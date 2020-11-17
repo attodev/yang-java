@@ -11,22 +11,22 @@ import java.util.*;
  * NETCONF operations using the {@link NetconfSession} class.
  * <p>
  * Example:
- * 
+ *
  * <pre>
- * 
+ *
  * // start (Netconf) sessions towards our device
  * SSHConnection connection = new SSHConnection(&quot;127.0.0.1&quot;);
  * connection.authenticateWithPassword(&quot;admin&quot;, &quot;pass&quot;);
  * SSHSession ssh = new SSHSession(connection);
  * NetconfSession session = new NetconfSession(ssh);
- * 
+ *
  * // get system configuration from session
  * Element sysConfig = session.getConfig(&quot;/system&quot;).first();
- * 
+ *
  * // manipulate the element tree
  * sysConfig.setValue(&quot;dns&quot;, &quot;83.100.1.1&quot;);
  * sysConfig.setValue(&quot;gateway&quot;, &quot;10.0.0.1&quot;);
- * 
+ *
  * // Write back the updated element tree
  * session.editConfig(sysConfig);
  * </pre>
@@ -79,10 +79,10 @@ public class Element implements Serializable {
      * level. For example the NETCONF prefix mapping "nc" is added here as a
      * default.
      */
-    public static final PrefixMap defaultPrefixes = new PrefixMap(new Prefix[] {
+    public static final PrefixMap defaultPrefixes = new PrefixMap(new Prefix[]{
             new Prefix("nc", NETCONF_NAMESPACE),
             new Prefix("pl", Capabilities.NS_PARTIAL_LOCK),
-            new Prefix("ncn", Capabilities.NS_NOTIFICATION) });
+            new Prefix("ncn", Capabilities.NS_NOTIFICATION)});
 
     /**
      * Children to the node, if container element.
@@ -97,16 +97,18 @@ public class Element implements Serializable {
     /**
      * Constructor that creates a new element tree. An element consists of a
      * name that belongs to a namespace.
-     * 
-     * @param ns Namespace
+     *
+     * @param ns   Namespace
      * @param name Name of the element
      */
     public Element(String ns, String name) {
         namespace = ns;
         this.name = name;
-        final PrefixMap prefixMap = new PrefixMap();
-        prefixMap.add(new Prefix("", namespace));
-        setPrefix(prefixMap);
+        if(ns!=null && !ns.equals("")){
+            final PrefixMap prefixMap = new PrefixMap();
+            prefixMap.add(new Prefix("", namespace));
+            setPrefix(prefixMap);
+        }
     }
 
     public Element getRootElement() {
@@ -125,9 +127,9 @@ public class Element implements Serializable {
      * <p>
      * See {@link PathCreate} for more information about path create
      * expressions.
-     * 
+     *
      * @param namespace Namespace
-     * @param pathStr A "path create" string
+     * @param pathStr   A "path create" string
      * @return A new configuration element tree
      */
     public static Element create(String namespace, String pathStr)
@@ -145,8 +147,8 @@ public class Element implements Serializable {
      * <p>
      * See {@link PathCreate} for more information about path create
      * expressions.
-     * 
-     * @param prefix A prefix mapping.
+     *
+     * @param prefix  A prefix mapping.
      * @param pathStr A "path create" string
      * @return A new configuration element tree
      */
@@ -165,9 +167,9 @@ public class Element implements Serializable {
      * <p>
      * See {@link PathCreate} for more information about path create
      * expressions.
-     * 
+     *
      * @param prefixMap Prefix mappings to be added
-     * @param pathStr A "path create" string
+     * @param pathStr   A "path create" string
      * @return A new configuration element tree
      */
     public static Element create(PrefixMap prefixMap, String pathStr)
@@ -201,7 +203,7 @@ public class Element implements Serializable {
 
     /**
      * Creates a child element to the context node.
-     * 
+     *
      * @param name The name of the child element
      */
     public Element createChild(String name) {
@@ -212,8 +214,8 @@ public class Element implements Serializable {
 
     /**
      * Creates a child element with specified value.
-     * 
-     * @param name The name of the child element
+     *
+     * @param name  The name of the child element
      * @param value The value of the element
      */
     public Element createChild(String name, Object value) {
@@ -225,10 +227,10 @@ public class Element implements Serializable {
 
     /**
      * Creates a child element with specified value.
-     * 
+     *
      * @param namespace The namespace that the name belongs to
-     * @param name The name of the child element
-     * @param value The value of the element
+     * @param name      The name of the child element
+     * @param value     The value of the element
      */
     public Element createChild(String namespace, String name, Object value) {
         final Element elem = new Element(namespace, name);
@@ -239,7 +241,7 @@ public class Element implements Serializable {
 
     /**
      * Returns the path for this element including an appended sub-path.
-     * 
+     *
      * @param subPath A sub-path to be appended to the current path
      */
     public String getElementPath(String subPath) {
@@ -252,10 +254,10 @@ public class Element implements Serializable {
      * <p>
      * See {@link PathCreate} for more information about path create
      * expressions.
-     * 
+     *
      * @param pathStr A "path create" string.
      * @return A new configuration element sub-tree that is a child of the
-     *         context node
+     * context node
      */
     public Element createPath(String pathStr) throws JNCException {
         return createPath(CREATE_MERGE, null, pathStr);
@@ -265,11 +267,11 @@ public class Element implements Serializable {
      * Creates an element tree as a child to the context node from a create
      * path expression. The mode parameter is one of: {@link #CREATE_NEW},
      * {@link #CREATE_MERGE}, {@link #CREATE_MERGE_MULTI}
-     * 
-     * @param mode The creation mode.
+     *
+     * @param mode    The creation mode.
      * @param pathStr A "path create" string.
      * @return A new configuration element sub-tree that is a child of the
-     *         context node
+     * context node
      */
     public Element createPath(int mode, String pathStr) throws JNCException {
         return createPath(mode, null, pathStr);
@@ -283,11 +285,11 @@ public class Element implements Serializable {
      * <p>
      * See {@link PathCreate} for more information about path create
      * expressions.
-     * 
+     *
      * @param namespace Namespace.
-     * @param pathStr A "path create" string.
+     * @param pathStr   A "path create" string.
      * @return A new configuration element sub-tree that is a child of the
-     *         context node
+     * context node
      */
     public Element createPath(String namespace, String pathStr)
             throws JNCException {
@@ -304,11 +306,11 @@ public class Element implements Serializable {
      * <p>
      * See {@link PathCreate} for more information about path create
      * expressions.
-     * 
-     * @param prefix A prefix mapping
+     *
+     * @param prefix  A prefix mapping
      * @param pathStr A "path create" string.
      * @return A new configuration element sub-tree that is a child of the
-     *         context node
+     * context node
      */
     public Element createPath(Prefix prefix, String pathStr)
             throws JNCException {
@@ -325,11 +327,11 @@ public class Element implements Serializable {
      * <p>
      * See {@link PathCreate} for more information about path create
      * expressions.
-     * 
+     *
      * @param addPrefixes Prefix mappings
-     * @param pathStr A "path create" string.
+     * @param pathStr     A "path create" string.
      * @return A new configuration element sub-tree that is a child of the
-     *         context node
+     * context node
      */
     public Element createPath(PrefixMap addPrefixes, String pathStr)
             throws JNCException {
@@ -346,12 +348,12 @@ public class Element implements Serializable {
      * <p>
      * See {@link PathCreate} for more information about path create
      * expressions.
-     * 
-     * @param mode The creation mode.
+     *
+     * @param mode        The creation mode.
      * @param addPrefixes Prefix mappings
-     * @param pathStr A "path create" string.
+     * @param pathStr     A "path create" string.
      * @return A new configuration element sub-tree that is a child of the
-     *         context node
+     * context node
      */
     public Element createPath(int mode, PrefixMap addPrefixes, String pathStr)
             throws JNCException {
@@ -427,7 +429,7 @@ public class Element implements Serializable {
     /**
      * Sets a prefix mapping to the context node. A prefix map is used for
      * resolving prefix to namespace mappings for a given path.
-     * 
+     *
      * @param prefix String prefix to be used for the namespace.
      */
     public void setPrefix(String prefix) {
@@ -437,7 +439,7 @@ public class Element implements Serializable {
     /**
      * Sets a prefix map to the context node. A prefix map is used for
      * resolving prefix to namespace mappings for a given path.
-     * 
+     *
      * @param prefix A prefix mapping
      */
     public void setPrefix(Prefix prefix) {
@@ -447,7 +449,7 @@ public class Element implements Serializable {
     /**
      * Sets prefix mappings to the context node. A prefix map is used for
      * resolving prefix to namespace mappings for a given path.
-     * 
+     *
      * @param prefixMap Prefix mappings
      */
     public void setPrefix(PrefixMap prefixMap) {
@@ -471,7 +473,7 @@ public class Element implements Serializable {
 
     /**
      * Returns the parent node of this node. Or <code>null</code> if none.
-     * 
+     *
      * @return Parent configuration element node or <code>null</code>
      */
     public Element getParent() {
@@ -480,7 +482,7 @@ public class Element implements Serializable {
 
     /**
      * Adds child to children and makes this element the parent of child.
-     * 
+     *
      * @param child Child element to be added
      */
     public void addChild(Element child) {
@@ -497,10 +499,10 @@ public class Element implements Serializable {
      * occurrence of) the inserted child in the list of children.
      * <p>
      * Checks that child is not already in use.
-     * 
+     *
      * @param child Child element to be inserted
      * @throws JNCException If child is already a child of another element or
-     *             if child equals this element
+     *                      if child equals this element
      */
     public int insertChild(Element child) throws JNCException {
         if (child.parent != null || child == this) {
@@ -513,7 +515,7 @@ public class Element implements Serializable {
     /**
      * Inserts a child element at a specific index in the list of children and
      * returns that index upon success.
-     * 
+     *
      * @param child Child element to be inserted
      * @param index Position in child list to insert child to. 0 is the first.
      * @throws JNCException If child is already a child of another element.
@@ -535,8 +537,8 @@ public class Element implements Serializable {
     /**
      * Inserts a child element at the correct position by providing structure
      * information (the names of all the children, in order).
-     * 
-     * @param child Child element to be inserted
+     *
+     * @param child         Child element to be inserted
      * @param childrenNames The names of all children in order.
      * @throws JNCException If child is already a child of another element.
      */
@@ -571,7 +573,7 @@ public class Element implements Serializable {
 
     /**
      * Inserts a child element first in the list of children. Always returns 0.
-     * 
+     *
      * @param child Child element to be inserted
      * @throws JNCException If child is already a child of another element.
      */
@@ -582,10 +584,10 @@ public class Element implements Serializable {
     /**
      * Inserts a child element last in the list of children. Returns the
      * position of the inserted child.
-     * 
+     *
      * @param child Child element to be inserted
      * @throws JNCException If child is already a child of another element or
-     *             if child equals this element
+     *                      if child equals this element
      */
     public int insertLast(Element child) throws JNCException {
         return insertChild(child);
@@ -604,7 +606,7 @@ public class Element implements Serializable {
      * deleted. An array of the deleted children is returned.
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string for children that will be deleted
      * @return An array of the deleted element nodes.
      */
@@ -632,7 +634,7 @@ public class Element implements Serializable {
 
     /**
      * Deletes a child node, provided it is present in the children list.
-     * 
+     *
      * @param child Child to delete
      */
     public void deleteChild(Element child) {
@@ -651,7 +653,7 @@ public class Element implements Serializable {
     /**
      * Returns <code>true</code> if this node has any children,
      * <code>false</code> otherwise.
-     * 
+     *
      * @return <code>true</code> or <code>false</code>
      */
     public boolean hasChildren() {
@@ -662,7 +664,7 @@ public class Element implements Serializable {
 
     /**
      * Adds an attribute for this element.
-     * 
+     *
      */
     public void addAttr(Attribute attr) {
         if (attrs == null) {
@@ -673,7 +675,7 @@ public class Element implements Serializable {
 
     /**
      * Gets all attributes for this element.
-     * 
+     *
      * @return An array of configuration attributes or <code>null</code>
      */
     public Attribute[] getAttrs() {
@@ -687,7 +689,7 @@ public class Element implements Serializable {
      * Returns the string value of the named attribute. Returns
      * <code>null</code> if no such attribute is found or "" if no value is
      * given to the attribute.
-     * 
+     *
      * @param name The name of the attribute
      * @return String value of the attribute.
      */
@@ -697,7 +699,7 @@ public class Element implements Serializable {
 
     /**
      * Gets an Attribute
-     * 
+     *
      * @param name Lookup using the name of attribute
      */
     public Attribute getAttr(String name) {
@@ -715,8 +717,8 @@ public class Element implements Serializable {
      * Sets an attribute on this element, treating xmlns attributes as prefix
      * maps. If the attribute already exists, its value is changed, otherwise
      * the attribute is added.
-     * 
-     * @param name The name of the attribute
+     *
+     * @param name  The name of the attribute
      * @param value The value of the attribute
      * @return The configuration attribute.
      */
@@ -754,9 +756,9 @@ public class Element implements Serializable {
      * <p>
      * If name starts with xmlns and ns starts with the xmlns namespace
      * (http://www.w3.org/2000/xmlns/), the value is set as a prefix map.
-     * 
-     * @param ns The namespace that the attribute name belongs to
-     * @param name The name of the attribute
+     *
+     * @param ns    The namespace that the attribute name belongs to
+     * @param name  The name of the attribute
      * @param value The value of the attribute
      * @return The configuration attribute.
      */
@@ -788,7 +790,7 @@ public class Element implements Serializable {
      * Removes an attribute with specified name. This method does not consider
      * namespace so note that it will remove the first attribute which matches
      * the name (and no other).
-     * 
+     *
      * @param name The name of the attribute to be removed.
      */
     public void removeAttr(String name) {
@@ -807,9 +809,9 @@ public class Element implements Serializable {
     /**
      * Removes an attribute with specified namespace and name from this
      * element's attribute list.
-     * 
+     *
      * @param namespace the namespace the name belongs to.
-     * @param name The name of the attribute to be removed.
+     * @param name      The name of the attribute to be removed.
      */
     public void removeAttr(String namespace, String name) {
         if (attrs != null) {
@@ -827,7 +829,7 @@ public class Element implements Serializable {
 
     /**
      * Finds the value of child with specified name, if it exists.
-     * 
+     *
      * @param childName Name of child
      * @return Value of child, or null if none
      */
@@ -842,7 +844,7 @@ public class Element implements Serializable {
 
     /**
      * Returns the value of this element.
-     * 
+     *
      * @return The value of the element.
      */
     public Object getValue() {
@@ -853,10 +855,10 @@ public class Element implements Serializable {
      * Check if any nodes in this element matches a given path string.
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr The path to match
      * @return <code>true</code> if any node matches pathStr;
-     *         <code>false</code> otherwise.
+     * <code>false</code> otherwise.
      */
     public boolean exists(String pathStr) throws JNCException {
         final NodeSet nodes = get(pathStr);
@@ -868,7 +870,7 @@ public class Element implements Serializable {
      * or null if there are no matches.
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find node
      * @return The value of the (first) found element or <code>null</code>
      */
@@ -883,10 +885,10 @@ public class Element implements Serializable {
      * Returns the value(s) of nodes in a given path expression.
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find nodes
      * @return An array of the values of the element nodes found by the
-     *         expression (or <code>null</code>)
+     * expression (or <code>null</code>)
      */
     public Object[] getValues(String pathStr) throws JNCException {
         final NodeSet nodes = get(pathStr);
@@ -904,10 +906,10 @@ public class Element implements Serializable {
      * Returns the values of nodes in a given path expression.
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find nodes
      * @return A set with the values of the element nodes found by the
-     *         expression (or <code>null</code>)
+     * expression (or <code>null</code>)
      */
     public Set<String> getValuesAsSet(String pathStr) throws JNCException {
         final String[] valuesBefore = (String[]) getValues(pathStr);
@@ -916,7 +918,7 @@ public class Element implements Serializable {
 
     /**
      * Sets a new value for this node element.
-     * 
+     *
      * @param value Value to be set
      */
     public void setValue(Object value) {
@@ -928,9 +930,9 @@ public class Element implements Serializable {
      * Sets value for all node elements matching specified path string.
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find nodes
-     * @param value Value to be set
+     * @param value   Value to be set
      */
     public void setValue(String pathStr, Object value) throws JNCException {
         for (final Element elem : get(pathStr)) {
@@ -942,7 +944,7 @@ public class Element implements Serializable {
      * Deletes value of node(s)
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find nodes
      */
     public void deleteValue(String pathStr) throws JNCException {
@@ -965,16 +967,16 @@ public class Element implements Serializable {
      * <code>null</code> if no such node was found.
      * <p>
      * Example:
-     * 
+     *
      * <pre>
      *      Element full = NetconfSession:getConfig();
-     * 
+     *
      *      Element first_host = full.getFirst("/hosts/host");
      *      Element last_host = full.getLast("/hosts/host");
      * </pre>
-     * 
+     * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find nodes
      * @return The first element node found by the expression.
      */
@@ -991,7 +993,7 @@ public class Element implements Serializable {
      * <code>null</code> if no such node was found.
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find nodes
      * @return The last element node found by the expression.
      */
@@ -1007,14 +1009,14 @@ public class Element implements Serializable {
      * Gets all nodes matching a given path expression.
      * <p>
      * Example:
-     * 
+     *
      * <pre>
      * Element full_config = session.get();
      * NodeSet calle_nodes = full_config.get(&quot;host[www='Calle']&quot;);
      * </pre>
-     * 
+     *
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find nodes
      * @return An array of the element nodes found by the expression.
      */
@@ -1025,7 +1027,7 @@ public class Element implements Serializable {
 
     /**
      * Returns the children of this node.
-     * 
+     *
      * @return The children node set of this node or <code>null</code>
      */
     public NodeSet getChildren() {
@@ -1034,7 +1036,7 @@ public class Element implements Serializable {
 
     /**
      * Get the children with specified name, from children list
-     * 
+     *
      * @param name Name of child
      * @return a NodeSet with all chldren that has the name
      */
@@ -1053,7 +1055,7 @@ public class Element implements Serializable {
 
     /**
      * Get the (first) child with specified name, from children list
-     * 
+     *
      * @param name Name of child
      * @return The found element or <code>null</code>
      */
@@ -1072,7 +1074,7 @@ public class Element implements Serializable {
     /**
      * Clones the tree, making an exact copy. The entire tree is treated as if
      * it was created.
-     * 
+     *
      * @return A copy of the element sub-tree.
      */
     @Override
@@ -1098,7 +1100,7 @@ public class Element implements Serializable {
 
     /**
      * Tries to find an element with the same namespace and name as x.
-     * 
+     *
      * @param child Element to compare against
      * @return the matching element if it exists; <code>null</code> otherwise.
      */
@@ -1116,7 +1118,7 @@ public class Element implements Serializable {
     /**
      * Clones the tree, making an exact copy. Does only clone this level. not
      * the children.
-     * 
+     *
      * @return A copy of the shallow element sub-tree.
      */
     protected Element cloneShallow() {
@@ -1127,20 +1129,20 @@ public class Element implements Serializable {
     }
 
     /**
-     * Operation flag to be used with {@link #merge(Element,int)}.
+     * Operation flag to be used with {@link #merge(Element, int)}.
      */
     public final static int OP_CREATE = 1;
     /**
-     * Operation flag to be used with {@link #merge(Element,int)}.
+     * Operation flag to be used with {@link #merge(Element, int)}.
      */
     public final static int OP_DELETE = 2;
     /**
-     * Operation flag to be used with {@link #merge(Element,int)}.
+     * Operation flag to be used with {@link #merge(Element, int)}.
      */
     public final static int OP_REPLACE = 3;
 
     /**
-     * Operation flag to be used with {@link #merge(Element,int)}.
+     * Operation flag to be used with {@link #merge(Element, int)}.
      */
     public final static int OP_MERGE = 4;
 
@@ -1148,12 +1150,12 @@ public class Element implements Serializable {
      * Merges a subtree into a resulting target subtree. The 'op' parameter
      * controls how the nodes that are added in the target subtree should be
      * marked. Either OP_CREATE, OP_DELETE, OP_MERGE or OP_REPLACE.
-     * 
+     *
      * @param root Target subtree. Must start from root node.
-     * @param op One of {@link #OP_CREATE}, {@link #OP_DELETE},
-     *            {@link #OP_MERGE} or {@link #OP_REPLACE}
+     * @param op   One of {@link #OP_CREATE}, {@link #OP_DELETE},
+     *             {@link #OP_MERGE} or {@link #OP_REPLACE}
      * @return Resulting target subtrees in NodeSet
-     * 
+     *
      */
     public Element merge(Element root, int op) throws JNCException {
 
@@ -1251,7 +1253,7 @@ public class Element implements Serializable {
     /**
      * Clones the attributes to the target copy. Used in clone methods of this
      * class and YangElement.
-     * 
+     *
      * @param copy The target copy to clone the attributes to
      */
     protected Element cloneAttrs(Element copy) {
@@ -1274,7 +1276,7 @@ public class Element implements Serializable {
     /**
      * clones the value to the target copy. Used in clone methods of this
      * class and YangElement.
-     * 
+     *
      * @param copy The target copy to clone the value field to
      */
     protected Element cloneValue(Element copy) {
@@ -1301,17 +1303,17 @@ public class Element implements Serializable {
      * <code>setAttr(Element.NETCONF_NAMESPACE,"operation",operation);</code> see @setAttr
      */
     public void setMark(String operation) {
-        Element that = this;
-        while (that!=null&&that.prefixes==null){
-            that = that.getParent();
-        }
-        that.prefixes.merge(defaultPrefixes);
+//        Element that = this;
+//        while (that!=null&&that.prefixes==null){
+//            that = that.getParent();
+//        }
+//        that.prefixes.merge(defaultPrefixes);
         setAttr(NETCONF_NAMESPACE, OPERATION, operation);
     }
 
     /**
      * Removes all operation attributes from a sub-tree.
-     * 
+     *
      */
     public void removeMarks() {
         removeMark();
@@ -1321,6 +1323,7 @@ public class Element implements Serializable {
             }
         }
     }
+
     /**
      * Marks a node with operation delete.
      */
@@ -1344,6 +1347,7 @@ public class Element implements Serializable {
             }
         }
     }
+
     /**
      * Marks a node with operation delete.
      */
@@ -1355,7 +1359,7 @@ public class Element implements Serializable {
      * Marks node(s) with operation delete.
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find nodes
      */
     public void markDelete(String pathStr) throws JNCException {
@@ -1379,7 +1383,7 @@ public class Element implements Serializable {
      * Marks node(s) with operation replace.
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find nodes
      */
     public void markReplace(String pathStr) throws JNCException {
@@ -1403,7 +1407,7 @@ public class Element implements Serializable {
      * Marks node(s) with operation merge.
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find nodes
      */
     public void markMerge(String pathStr) throws JNCException {
@@ -1427,7 +1431,7 @@ public class Element implements Serializable {
      * Marks node(s) with operation create.
      * <p>
      * See {@link Path} for more information about path expressions.
-     * 
+     *
      * @param pathStr Path string to find nodes
      */
     public void markCreate(String pathStr) throws JNCException {
@@ -1446,7 +1450,7 @@ public class Element implements Serializable {
      * A qualified name is a prefixed name. This method will find the prefix of
      * this elements namespace and build a name in the format: "prefix:name".
      * If no prefix is found the prefix "unknown" will be used.
-     * 
+     *
      * @return The qualified name of the element.
      */
     public String qualifiedName() {
@@ -1468,7 +1472,7 @@ public class Element implements Serializable {
 
     /**
      * Returns the prefix name of this element.
-     * 
+     *
      * @return The prefix name that the namespace of this element is bound to
      */
     public String prefix() {
@@ -1478,7 +1482,7 @@ public class Element implements Serializable {
     /**
      * Returns a prefix map, as it is in the current context. The prefix map is
      * built up by traversing the parents.
-     * 
+     *
      * @return The prefix mappings available at this context node
      */
     public PrefixMap getContextPrefixMap() {
@@ -1499,10 +1503,10 @@ public class Element implements Serializable {
      * Lookups a prefix and returns the associated namespace, traverses up the
      * parent links until the prefix is found. Returns <code>null</code> if the
      * prefix is not found.
-     * 
+     *
      * @param prefix Prefix string to lookup.
      * @return The namespace of the specified prefix in the context of this
-     *         node.
+     * node.
      */
     public String lookupContextPrefix(String prefix) {
         Element node = this;
@@ -1523,7 +1527,7 @@ public class Element implements Serializable {
      * This method will find the prefix of a specified namespace, from the
      * given context node. If no prefix is found <code>null</code> will be
      * returned.
-     * 
+     *
      * @param ns Namespace string to lookup
      * @return The prefix string of the given namespace at the context node.
      */
@@ -1548,7 +1552,7 @@ public class Element implements Serializable {
 
     /**
      * Returns the path as a string
-     * 
+     *
      * @return The path of element
      */
     public String getElementPath() {
@@ -1585,10 +1589,10 @@ public class Element implements Serializable {
      * <li>namespace
      * <li>value
      * </ul>
-     * 
+     *
      * @param other Object to compare this element against.
      * @return <code>true</code> if other is an Element with same name,
-     *         namespace and value; <code>false</code> otherwise.
+     * namespace and value; <code>false</code> otherwise.
      */
     @Override
     public boolean equals(Object other) {
@@ -1609,9 +1613,9 @@ public class Element implements Serializable {
 
     /**
      * Returns a hash code value for this object.
-     * 
+     *
      * @return The sum of the hash codes of the name, namespace and value of
-     *         this element subtree node.
+     * this element subtree node.
      */
     @Override
     public int hashCode() {
@@ -1620,14 +1624,14 @@ public class Element implements Serializable {
 
     /**
      * Compare two elements. Compares the name, namespace, and value. Returns:
-     * 
+     *
      * <ul>
      * <li>-1 - if the two containers keys are not equal, which means that they
      * are completely different.
      * <li>0 - if the two elements are equal in name, namespace, and value.
      * <li>1 - the two containers are the same except the value.
      * </ul>
-     * 
+     *
      * @param b Element to compare this element against.
      */
     public int compare(Element b) {
@@ -1642,7 +1646,7 @@ public class Element implements Serializable {
     /**
      * Builds a string with the name, value, namespace, prefixes, other
      * attributes, children and the path of this element subtree.
-     * 
+     *
      * @return String representation of this element
      */
     @Override
@@ -1693,7 +1697,7 @@ public class Element implements Serializable {
     /**
      * This will format the tree as an XML string, which can be printed. The
      * XML code is nicely indented.
-     * 
+     *
      * @return This element sub-tree represented as an XML string
      */
     public String toXMLString() {
@@ -1702,86 +1706,6 @@ public class Element implements Serializable {
         return s.toString();
     }
 
-    public String toJSONString(){
-        final StringBuffer s = new StringBuffer();
-        toJSONString(true,false,false,0, s);
-        s.append("\n}");
-        return s.toString();
-    }
-
-    private void toJSONString(boolean first,boolean isEnd,boolean isArray,int indent, StringBuffer s){
-        final boolean flag = hasChildren();
-        boolean isArrayChild=false;
-        if(flag){
-            String  name =null;
-            for (final Element child : children) {
-                if(name!=null&&name.equals(child.qualifiedName())){
-                    isArrayChild =true;
-                    break;
-                }
-                name =child.qualifiedName();
-            }
-        }
-        final String qName = qualifiedName();
-        s.append(getIndentationSpacing(true, indent));
-        if(first){
-            if(isArray){
-                s.append("[");
-            }else{
-            s.append("{");}
-        }
-        if(!isArray)
-        {
-            s.append("\n").append(getIndentationSpacing(true, indent)).append("\"").append(qName).append("\":");
-        }
-        // add xmlns attributes (prefixes)
-//        if (prefixes != null) {
-//            for (final Prefix p : prefixes) {
-//                s.append(" ").append(p.toXMLString());
-//            }
-//        }
-//        // add attributes
-//        if (attrs != null) {
-//            for (final Attribute attr : attrs) {
-//                s.append(" ").append(attr.toXMLString(this));
-//            }
-//        }
-        indent++;
-        // add children elements if any
-        if (flag) {
-//            s.append("").append(("\n"));
-            int index=0;
-            int endIndex =children.size()-1;
-            for (final Element child : children) {
-                child.toJSONString(index==0,index==endIndex,isArrayChild,indent, s);
-                if(index!=endIndex)
-                    s.append(",");
-                s.append("\n");//.append(getIndentationSpacing(true, indent));
-                index++;
-            }
-        } else { // add value if any
-            if (value != null) {
-                s.append(("\""));
-                final String stringValue = value.toString().replaceAll("&",
-                        "&amp;");
-                s.append(getIndentationSpacing(false, indent));
-                s.append(stringValue).append(("\""));
-            } else {
-                // self-closing tag
-                s.append("null").append(("}"));
-                return;
-            }
-        }
-        if(flag){
-            if(isArrayChild ){
-                s.append(getIndentationSpacing(flag, indent)).append("]");
-            }else{
-                s.append(getIndentationSpacing(flag, indent)).append("}");
-            }
-        }
-
-        indent--;
-    }
 
     private void toXMLString(int indent, StringBuffer s) {
         final boolean flag = hasChildren();
@@ -1791,7 +1715,20 @@ public class Element implements Serializable {
         // add xmlns attributes (prefixes)
         if (prefixes != null) {
             for (final Prefix p : prefixes) {
-                s.append(" ").append(p.toXMLString());
+                if(this.getValue() instanceof YangIdentityref && ((YangIdentityref) this.getValue()).getValue().prefixes!=null){
+                    PrefixMap prefixes = ((YangIdentityref) this.getValue()).getValue().prefixes;
+                    s.append(" ").append(prefixes.get(0).toXMLString());
+                }else{
+                    Prefix pPrefix = parent == null ? null : parent.prefixes == null ?
+                            (parent.parent == null ? null :
+                                    (parent.parent.prefixes == null ? null :
+                                            parent.parent.prefixes.lookup(p.name))) :
+                            parent.prefixes.lookup(p.name);
+                    if ((pPrefix == null || !pPrefix.value.equals(p.value))
+                            &&!( p.name.equals("")&& (this.getValue() instanceof YangIdentityref))) {
+                        s.append(" ").append(p.toXMLString());
+                    }
+                }
             }
         }
         // add attributes
@@ -1815,23 +1752,161 @@ public class Element implements Serializable {
                 s.append(getIndentationSpacing(false, indent));
                 s.append(stringValue).append((""));
             } else {
-             // self-closing tag
-             s.append("/>").append((""));
-             return;
+                // self-closing tag
+                s.append("/>").append((""));
+                return;
             }
         }
         indent--;
         s.append(getIndentationSpacing(flag, indent)).append("</").append(qName).append(">\n");
     }
+
+    public String toCLIString() {
+        final StringBuffer s = new StringBuffer();
+        toCLIString(0, s);
+        return s.toString();
+    }
+
+    protected void toCLIString(int indent, StringBuffer s) {
+        final boolean flag = hasChildren();
+        final String qName = qualifiedName();
+
+        s.append(new String(new char[indent * 2]).replace("\0", " "));
+        s.append("").append(qName);
+        // add xmlns attributes (prefixes)
+//        if (prefixes != null) {
+//            for (final Prefix p : prefixes) {
+//                s.append(" ").append(p.toXMLString());
+//            }
+//        }
+        // add attributes
+//        if (attrs != null) {
+//            for (final Attribute attr : attrs) {
+//                s.append(" ").append(attr.toXMLString(this));
+//            }
+//        }
+        indent++;
+        // add children elements if any
+        if (flag) {
+            s.append("").append(("\n"));
+            for (final Element child : children) {
+                child.toCLIString(indent, s);
+            }
+
+        } else { // add value if any
+            if (value != null) {
+                s.append(" ").append((""));
+                final String stringValue = value.toString().replaceAll("&",
+                        "&amp;");
+                s.append(getIndentationSpacing(false, indent));
+                s.append(stringValue).append((""));
+            } else {
+                // self-closing tag
+                s.append("").append((""));
+                return;
+            }
+        }
+        indent--;
+
+        s.append(getIndentationSpacing(flag, indent)).append("").append("");
+//        if(this instanceof  Leaf){
+//
+//        }else{
+//            s.append(getIndentationSpacing(flag, indent)).append("exit").append("\n");
+//        }
+
+    }
+
+    public String toJSONString() {
+        final StringBuffer s = new StringBuffer();
+        toJSONString(true, false, false, 0, s);
+        s.append("\n}");
+        return s.toString();
+    }
+
+    private void toJSONString(boolean first, boolean isEnd, boolean isArray, int indent, StringBuffer s) {
+        final boolean flag = hasChildren();
+        boolean isArrayChild = false;
+        if (flag) {
+            String name = null;
+            for (final Element child : children) {
+                if (name != null && name.equals(child.qualifiedName())) {
+                    isArrayChild = true;
+                    break;
+                }
+                name = child.qualifiedName();
+            }
+        }
+        final String qName = qualifiedName();
+        s.append(getIndentationSpacing(true, indent));
+        if (first) {
+            if (isArray) {
+                s.append("[");
+            } else {
+                s.append("{");
+            }
+        }
+        if (!isArray) {
+            s.append("\n").append(getIndentationSpacing(true, indent)).append("\"").append(qName).append("\":");
+        }
+        // add xmlns attributes (prefixes)
+//        if (prefixes != null) {
+//            for (final Prefix p : prefixes) {
+//                s.append(" ").append(p.toXMLString());
+//            }
+//        }
+//        // add attributes
+//        if (attrs != null) {
+//            for (final Attribute attr : attrs) {
+//                s.append(" ").append(attr.toXMLString(this));
+//            }
+//        }
+        indent++;
+        // add children elements if any
+        if (flag) {
+//            s.append("").append(("\n"));
+            int index = 0;
+            int endIndex = children.size() - 1;
+            for (final Element child : children) {
+                child.toJSONString(index == 0, index == endIndex, isArrayChild, indent, s);
+                if (index != endIndex)
+                    s.append(",");
+                s.append("\n");//.append(getIndentationSpacing(true, indent));
+                index++;
+            }
+        } else { // add value if any
+            if (value != null) {
+                s.append(("\""));
+                final String stringValue = value.toString().replaceAll("&",
+                        "&amp;");
+                s.append(getIndentationSpacing(false, indent));
+                s.append(stringValue).append(("\""));
+            } else {
+                // self-closing tag
+                s.append("null").append(("}"));
+                return;
+            }
+        }
+        if (flag) {
+            if (isArrayChild) {
+                s.append(getIndentationSpacing(flag, indent)).append("]");
+            } else {
+                s.append(getIndentationSpacing(flag, indent)).append("}");
+            }
+        }
+
+        indent--;
+    }
+
     /**
      * Gets indentation spacing for any given indent level.
-     * 
+     *
      * @param shouldIndent Whether or not there should be any indentation.
-     * @param indent The indentation level.
+     * @param indent       The indentation level.
      * @return A string with indent * 2 number of spaces if shouldIndent is
-     *         <code>true</code>; otherwise an empty string.
+     * <code>true</code>; otherwise an empty string.
      */
-    private String getIndentationSpacing(boolean shouldIndent, int indent) {
+    protected String getIndentationSpacing(boolean shouldIndent, int indent) {
         if (shouldIndent) {
             return new String(new char[indent * 2]).replace("\0", " ");
         }
@@ -1843,7 +1918,7 @@ public class Element implements Serializable {
      * toXMLString(), but without the pretty printing.
      * <p>
      * Equivalent to calling encode(out, <code>true</code>, <code>null</code>);
-     * 
+     *
      * @param out Stream to send the encoded version of this element to.
      * @throws JNCException If a YangElement encode implementation fails
      */
@@ -1856,9 +1931,9 @@ public class Element implements Serializable {
      * toXMLString(), but without the pretty printing.
      * <p>
      * Equivalent to calling encode(out, <code>true</code>, c);
-     * 
+     *
      * @param out Stream to send the encoded version of this element to.
-     * @param c Capabilities, used by YangElement instances.
+     * @param c   Capabilities, used by YangElement instances.
      * @throws JNCException If a YangElement encode implementation fails.
      */
     protected void encode(Transport out, Capabilities c) throws JNCException {
@@ -1873,8 +1948,8 @@ public class Element implements Serializable {
      * at the end or not.
      * <p>
      * Equivalent to calling encode(out, newline_at_end, <code>null</code>);
-     * 
-     * @param out Stream to send the encoded version of this element to.
+     *
+     * @param out            Stream to send the encoded version of this element to.
      * @param newline_at_end If 'true' a newline is printed at the end.
      * @throws JNCException If a YangElement encode implementation fails.
      */
@@ -1889,21 +1964,35 @@ public class Element implements Serializable {
      * <p>
      * The newline_at_end argument controls whether a newline char is permitted
      * at the end or not.
-     * 
-     * @param out Stream to send the encoded version of this element to.
+     *
+     * @param out            Stream to send the encoded version of this element to.
      * @param newline_at_end If 'true' a newline is printed at the end.
-     * @param c Capabilities, used by YangElement instances.
+     * @param c              Capabilities, used by YangElement instances.
      * @throws JNCException If a YangElement encode implementation fails.
      */
     protected void encode(Transport out, boolean newline_at_end,
-            Capabilities capas) throws JNCException {
+                          Capabilities capas) throws JNCException {
         final String qName = qualifiedName();
         out.print("<" + qName);
         // add xmlns attributes (prefixes)
         if (prefixes != null) {
             for (final Prefix p : prefixes) {
-                out.print(" ");
-                p.encode(out);
+                if(this.getValue() instanceof YangIdentityref && ((YangIdentityref) this.getValue()).getValue().prefixes!=null){
+                    PrefixMap prefixes = ((YangIdentityref) this.getValue()).getValue().prefixes;
+                    out.print(" ");
+                    prefixes.get(0).encode(out);
+                }else{
+                    Prefix pPrefix = parent == null ? null : parent.prefixes == null ?
+                            (parent.parent == null ? null :
+                                    (parent.parent.prefixes == null ? null :
+                                            parent.parent.prefixes.lookup(p.name))) :
+                            parent.prefixes.lookup(p.name);
+                    if ((pPrefix == null || !pPrefix.value.equals(p.value))
+                            &&!( p.name.equals("")&& (this.getValue() instanceof YangIdentityref))) {
+                        out.print(" ");
+                        p.encode(out);
+                    }
+                }
             }
         }
         // add attributes
@@ -1923,16 +2012,16 @@ public class Element implements Serializable {
             // otherwise, add value (if any)
             out.print(">" + Utils.escapeXml(value.toString()));
         } else {
-	    // self-closing tag
-	    out.print("/>" + (newline_at_end ? "\n" : ""));
-	    return;
-	}
+            // self-closing tag
+            out.print("/>" + (newline_at_end ? "\n" : ""));
+            return;
+        }
         out.print("</" + qName + ">" + (newline_at_end ? "\n" : ""));
     }
 
     /**
      * Return the full tagpath for this Element
-     * 
+     *
      * @return Absolute tagpath to this node
      */
     public Tagpath tagpath() {
@@ -1953,7 +2042,7 @@ public class Element implements Serializable {
 
     /**
      * Return an iterator for the children of this node.
-     * 
+     *
      * @return A new iterator over this element's children
      */
     public ElementChildrenIterator iterator() {
@@ -1964,7 +2053,7 @@ public class Element implements Serializable {
      * Return an iterator for the children of a specified name of this node.
      * <p>
      * Example usage:
-     * 
+     *
      * <pre>
      * ElementChildrenIterator hostIter = config.iterator(&quot;host&quot;);
      * while (hostIter.hasNext()) {
@@ -1972,7 +2061,7 @@ public class Element implements Serializable {
      *     System.out.println(&quot;Host: &quot; + host);
      * }
      * </pre>
-     * 
+     *
      * @param name A filter name, return only children with this name.
      * @return A new iterator over this element's children with specified name
      */
@@ -1983,7 +2072,7 @@ public class Element implements Serializable {
     /**
      * Write this configuration tree to a file. The configuration tree is
      * written as XML text.
-     * 
+     *
      * @param filename File name.
      * @see #readFile(String)
      */
@@ -1997,7 +2086,7 @@ public class Element implements Serializable {
 
     /**
      * Read file with XML text and parse it into a configuration tree.
-     * 
+     *
      * @param filename File name.
      * @see #writeFile(String)
      */

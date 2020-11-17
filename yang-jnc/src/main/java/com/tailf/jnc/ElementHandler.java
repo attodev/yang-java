@@ -26,6 +26,7 @@ class ElementHandler extends DefaultHandler {
     public int unknownLevel = 0;
     
     private boolean leaf = false;
+    private String leafNsPrefix;
     private String leafNs;
     private String leafName;
     private String leafValue;
@@ -66,6 +67,11 @@ class ElementHandler extends DefaultHandler {
             leafNs = uri;
             leafName = localName;
             leafValue = "";
+            if(prefixes!=null&&!prefixes.isEmpty()){
+                leafNsPrefix = prefixes.get(0).name;
+                leafNs =prefixes.get(0).value;
+            }
+            prefixes = null;
             return;
         }
         child.prefixes = prefixes;
@@ -121,7 +127,7 @@ class ElementHandler extends DefaultHandler {
             // If it's a Leaf - we need to set value properly using
             // the setLeafValue method which will check restrictions
             try {
-            ((YangElement) current).setLeafValue(leafNs, leafName, leafValue);
+            ((YangElement) current).setLeafValue(leafNsPrefix,leafNs, leafName, leafValue);
             } catch (final JNCException e) {
 //                e.printStackTrace();
                 throw new SAXException(e.toString(),e);
