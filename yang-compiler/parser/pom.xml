@@ -36,7 +36,7 @@
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.5.3</version>
+            <version>4.7</version>
         </dependency>
     </dependencies>
 
@@ -45,7 +45,7 @@
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
-                <version>4.5</version>
+                <version>4.7</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -65,7 +65,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>Deleting auto-generated listener interfaces</id>
