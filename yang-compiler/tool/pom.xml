@@ -21,9 +21,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.airlenet.yang</groupId>
+        <groupId>com.attodev.yang</groupId>
         <artifactId>yang-compiler</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.5.0</version>
     </parent>
 
     <artifactId>yang-compiler-tool</artifactId>
@@ -36,12 +36,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.airlenet.yang</groupId>
+            <groupId>com.attodev.yang</groupId>
             <artifactId>yang-compiler-parser</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.airlenet.yang</groupId>
+            <groupId>com.attodev.yang</groupId>
             <artifactId>yang-compiler-api</artifactId>
             <version>${project.version}</version>
         </dependency>

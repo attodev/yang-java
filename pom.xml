@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.airlenet.yang</groupId>
+    <groupId>com.attodev.yang</groupId>
     <artifactId>yang-java</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.5.0</version>
     <packaging>pom</packaging>
     <name>yang-java</name>
     <description>yang-java</description>
-    <url>https://github.com/airlenet/yang-java</url>
+    <url>https://github.com/attodev/yang-java</url>
     <modules>
         <module>yang-compiler</module>
         <module>yang-jnc</module>
@@ -44,17 +44,17 @@
         </developer>
     </developers>
     <organization>
-        <name>airlenet</name>
-        <url>http://www.airlenet.com</url>
+        <name>atto-research</name>
+        <url>http://www.atto-research.com</url>
     </organization>
     <scm>
         <connection>
-            scm:git:https://github.com/airlenet/yang-java.git
+            scm:git:https://github.com/attodev/yang-java.git
         </connection>
         <developerConnection>
-            https://github.com/airlenet/yang-java.git
+            https://github.com/attodev/yang-java.git
         </developerConnection>
-        <url>https://github.com/airlenet/yang-java</url>
+        <url>https://github.com/attodev/yang-java</url>
         <tag>HEAD</tag>
     </scm>
     <repositories>
@@ -237,6 +237,7 @@
                 </plugins>
             </build>
         </profile>
+        <!--
 		<profile>
             <id>private</id>
             <repositories>
@@ -280,5 +281,6 @@
                 </snapshotRepository>
             </distributionManagement>
         </profile>
+        -->
     </profiles>
 </project>
