@@ -224,9 +224,11 @@ public class YangJavaNotificationTranslator
         for (YangAugment yangAugment : yangAugmentList) {
             YangNode augmentedNode = yangAugment.getChild();
             if (augmentedNode != null) {
+                /*
                 if (augmentedNode instanceof YangJavaUsesTranslator) {
                     augmentedNode = augmentedNode.getNextSibling();
                 }
+                */
 
                 ((JavaCodeGenerator) augmentedNode).generatePackageInfo(yangPlugin);
             }
